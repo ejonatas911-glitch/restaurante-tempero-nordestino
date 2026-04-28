@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;500;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Helvetica Neue", Arial, sans-serif;
+  
+  --color-primary: #D32F2F;
+  --color-primary-dark: #B71C1C;
+  --color-accent: #000000;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  --animate-marquee: marquee 20s linear infinite;
+}
+
+@layer base {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  * {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  body {
+    @apply bg-white text-gray-900 font-sans antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-black tracking-tighter text-gray-900 uppercase;
+  }
+}
+
+.nordeste-pattern {
+  background-color: #ffffff;
+  background-image: linear-gradient(#f0f0f0 1.2px, transparent 1.2px), linear-gradient(90deg, #f0f0f0 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+}
+
+.brutalist-card {
+  @apply bg-white border-2 border-accent p-6 transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none;
+}
+
+.btn-primary {
+  @apply bg-primary text-white px-6 py-3 border-2 border-accent font-bold uppercase tracking-widest transition-all hover:bg-primary-dark active:translate-x-[2px] active:translate-y-[2px] flex items-center justify-center gap-2;
+}
+
+.btn-accent {
+  @apply bg-accent text-white px-6 py-3 border-2 border-accent font-bold uppercase tracking-widest transition-all hover:bg-gray-800 active:translate-x-[2px] active:translate-y-[2px] flex items-center justify-center gap-2;
+}
+
+.btn-outline {
+  @apply border-2 border-accent text-accent px-6 py-3 font-bold uppercase tracking-widest transition-all hover:bg-black hover:text-white active:translate-x-[2px] active:translate-y-[2px] flex items-center justify-center gap-2;
+}
+
+.section-padding {
+  @apply py-8 px-6;
+}
+
+.heavy-border-bottom {
+  @apply border-b-8 border-accent;
+}
