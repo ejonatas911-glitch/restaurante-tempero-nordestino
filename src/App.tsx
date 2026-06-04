@@ -254,6 +254,22 @@ const MENU_ITEMS: MenuItem[] = [
     price: 6.00,
     image: 'https://lh3.googleusercontent.com/d/1gmSGIYVfrCkdNQWma95EZkoYvHBbKpZJ',
     category: 'Bebidas'
+  },
+  {
+    id: '24',
+    name: 'Coca-Cola (2L)',
+    description: 'Refrigerante de 2L bem gelado para acompanhar seu pedido.',
+    price: 10.00,
+    image: 'https://lh3.googleusercontent.com/d/11yWL9ZzIU8YxwxHRqlmb7itB1uDrSQVG',
+    category: 'Bebidas'
+  },
+  {
+    id: '25',
+    name: 'Coca-Cola Retornável (1L)',
+    description: 'Refrigerante retornável de 1L bem gelado para acompanhar sua refeição.',
+    price: 8.00,
+    image: 'https://lh3.googleusercontent.com/d/1uCB1R90xe-VieYxV_hgdlVqwql7MUhcN',
+    category: 'Bebidas'
   }
 ];
 
@@ -279,6 +295,9 @@ export default function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedBenefits, setSelectedBenefits] = useState<MenuItem | null>(null);
+  const [restaurantAddress, setRestaurantAddress] = useState<string>(() => {
+    return localStorage.getItem('restaurant_address') || 'Rua do Posto BR Mania, Centro, Arari - MA';
+  });
 
   const addToCart = (item: MenuItem) => {
     setCart(prev => {
@@ -309,7 +328,7 @@ export default function App() {
       `\n\nTotal: R$ ${cartTotal.toFixed(2)}\n\nEndereço de entrega: `;
     
     const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/5598999999999?text=${encoded}`, '_blank');
+    window.open(`https://wa.me/5598981049475?text=${encoded}`, '_blank');
   };
 
   const renderView = () => {
@@ -327,7 +346,16 @@ export default function App() {
       case View.ABOUT:
         return <AboutView onBack={() => setCurrentView(View.HOME)} />;
       case View.LOCATION:
-        return <LocationView onBack={() => setCurrentView(View.HOME)} />;
+        return (
+          <LocationView 
+            address={restaurantAddress} 
+            onAddressChange={(newAddr) => {
+              setRestaurantAddress(newAddr);
+              localStorage.setItem('restaurant_address', newAddr);
+            }} 
+            onBack={() => setCurrentView(View.HOME)} 
+          />
+        );
       case View.CONTACT:
         return <ContactView onBack={() => setCurrentView(View.HOME)} />;
       case View.DRINKS:
@@ -403,9 +431,10 @@ export default function App() {
       </div>
 
       {/* Persistent Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-accent text-white border-t-4 border-primary flex justify-around py-3 px-6 z-40">
+      <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-accent text-white border-t-4 border-primary flex justify-around py-3 px-3 z-40">
         <NavButton active={currentView === View.HOME} icon={<Utensils />} label="Início" onClick={() => setCurrentView(View.HOME)} />
         <NavButton active={currentView === View.MENU} icon={<Award />} label="Cardápio" onClick={() => setCurrentView(View.MENU)} />
+        <NavButton active={currentView === View.DRINKS} icon={<Coffee />} label="Bebidas" onClick={() => setCurrentView(View.DRINKS)} />
         <NavButton active={currentView === View.ORDERS} icon={<ShoppingCart />} label="Pedidos" onClick={() => setCurrentView(View.ORDERS)} />
         <NavButton active={currentView === View.LOCATION} icon={<MapPin />} label="Onde" onClick={() => setCurrentView(View.LOCATION)} />
       </nav>
@@ -566,7 +595,7 @@ function HomeView({ setView }: { setView: (v: View) => void }) {
       {/* Footer Info */}
       <div className="px-6 pb-6">
         <button 
-          onClick={() => setView(View.CONTACT)}
+          onClick={() => window.open('https://wa.me/5598981049475', '_blank')}
           className="btn-primary w-full bg-[#25D366] border-black text-white hover:bg-[#128C7E]"
         >
           <MessageCircle className="w-6 h-6" />
@@ -605,14 +634,35 @@ function MenuView({ onAdd, onBack, onShowBenefits }: { onAdd: (item: MenuItem) =
 }
 
 function BrutalistFoodCard({ item, onAdd, onShowBenefits }: { item: MenuItem, onAdd: () => void, onShowBenefits?: () => void, key?: React.Key }) {
+  const isBeverage = item.category === 'Bebidas';
+  const isJuice = isBeverage && item.name.toLowerCase().includes('suco');
+  const hasBenefits = item.benefits && (!isBeverage || isJuice);
+
   return (
     <div className="bg-white border-2 border-accent overflow-hidden relative shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
       <div 
-        className={`h-40 bg-gray-100 overflow-hidden relative cursor-pointer ${item.benefits ? 'group' : ''}`}
-        onClick={item.benefits ? onShowBenefits : undefined}
+        className={`h-40 bg-gray-100 overflow-hidden relative cursor-pointer ${hasBenefits ? 'group' : ''}`}
+        onClick={hasBenefits ? onShowBenefits : undefined}
       >
-        <img src={item.image} alt={item.name} className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" referrerPolicy="no-referrer" />
-        {item.benefits && (
+        <img 
+          src={item.image} 
+          alt={item.name} 
+          className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" 
+          referrerPolicy="no-referrer"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            if (item.category === 'Bebidas') {
+              if (item.name.toLowerCase().includes('suco')) {
+                e.currentTarget.src = "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=600&auto=format&fit=crop";
+              } else {
+                e.currentTarget.src = "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&auto=format&fit=crop";
+              }
+            } else {
+              e.currentTarget.src = "https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop";
+            }
+          }}
+        />
+        {hasBenefits && (
           <div className="absolute top-2 left-2 bg-primary text-white p-1 shadow-[2px_2px_0_0_rgba(0,0,0,1)] animate-pulse">
             <Info className="w-4 h-4" />
           </div>
@@ -621,8 +671,8 @@ function BrutalistFoodCard({ item, onAdd, onShowBenefits }: { item: MenuItem, on
       <div className="p-4 bg-white border-t-2 border-accent">
         <div className="flex justify-between items-start mb-2">
           <h3 
-            className={`text-xl leading-none ${item.benefits ? 'cursor-pointer hover:text-primary transition-colors' : ''}`}
-            onClick={item.benefits ? onShowBenefits : undefined}
+            className={`text-xl leading-none ${hasBenefits ? 'cursor-pointer hover:text-primary transition-colors' : ''}`}
+            onClick={hasBenefits ? onShowBenefits : undefined}
           >
             {item.name}
           </h3>
@@ -630,7 +680,7 @@ function BrutalistFoodCard({ item, onAdd, onShowBenefits }: { item: MenuItem, on
         </div>
         <p className="text-gray-500 text-xs mb-4 uppercase font-bold tracking-tight">{item.description}</p>
         <div className="flex flex-col gap-2">
-          {item.benefits && (
+          {hasBenefits && (
             <button 
               onClick={onShowBenefits}
               className="w-full text-[10px] font-black p-1 mb-1 border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all uppercase tracking-tighter"
@@ -796,28 +846,165 @@ function AboutView({ onBack }: { onBack: () => void }) {
 }
 
 // --- Location View ---
+ 
+function LocationView({ 
+  address, 
+  onAddressChange, 
+  onBack 
+}: { 
+  address: string; 
+  onAddressChange: (newAddr: string) => void; 
+  onBack: () => void; 
+}) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
-function LocationView({ onBack }: { onBack: () => void }) {
+  const defaultAddr = 'Rua do Posto BR Mania, Centro, Arari - MA';
+
+  const handleGetLocation = () => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+
+    if (!navigator.geolocation) {
+      setError('Geolocalização não é suportada por este navegador.');
+      setLoading(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&zoom=18`,
+            {
+              headers: {
+                'Accept-Language': 'pt-BR,pt;q=0.9',
+              }
+            }
+          );
+          
+          if (!response.ok) {
+            throw new Error('Falha ao conectar com o serviço de mapas.');
+          }
+          
+          const data = await response.json();
+          
+          if (data && data.address) {
+            const addr = data.address;
+            const street = addr.road || addr.pedestrian || addr.suburb || addr.construction || 'Rua Detectada';
+            const houseNumber = addr.house_number ? `, ${addr.house_number}` : '';
+            const neighborhood = addr.neighbourhood || addr.suburb || addr.quarter || 'Centro';
+            const city = addr.city || addr.town || addr.village || 'Arari';
+            const state = addr.state ? ` - ${addr.state}` : ' - MA';
+            
+            const newAddress = `${street}${houseNumber}, ${neighborhood}, ${city}${state}`;
+            onAddressChange(newAddress);
+            setSuccess(true);
+          } else {
+            setError('Não foi possível determinar de forma precisa o nome da rua para este local.');
+          }
+        } catch (err) {
+          setError('Erro de conexão ou ao buscar endereço. Tente novamente.');
+        } finally {
+          setLoading(false);
+        }
+      },
+      (err) => {
+        if (err.code === err.PERMISSION_DENIED) {
+          setError('Acesso negado. Ative a permissão de localização no seu navegador ou celular.');
+        } else if (err.code === err.POSITION_UNAVAILABLE) {
+          setError('Sinal de GPS fraco ou localização indisponível.');
+        } else if (err.code === err.TIMEOUT) {
+          setError('Tempo limite esgotado ao buscar localização.');
+        } else {
+          setError('Não foi possível obter a localização. Garanta que o GPS esteja ativado.');
+        }
+        setLoading(false);
+      },
+      { enableHighAccuracy: true, timeout: 12000 }
+    );
+  };
+
+  const handleReset = () => {
+    onAddressChange(defaultAddr);
+    setError(null);
+    setSuccess(false);
+  };
+
   return (
     <div className="px-6 space-y-6 pb-12">
       <SectionHeader title="Visite-nos" onBack={onBack} />
       
-      <div className="border-4 border-accent bg-white p-6 space-y-6">
+      <div className="border-4 border-accent bg-white p-6 space-y-6 shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
         <div>
-          <h4 className="text-xl mb-1">Centro Arari</h4>
-          <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest">Rua do Posto BR Mania, Centro, Arari - MA</p>
+          <h4 className="text-2xl font-black uppercase italic leading-none mb-2">Restaurante</h4>
+          <p className="text-primary font-black uppercase text-[10px] tracking-widest mb-2">Localização no App • Centro Arari</p>
+          <p className="text-gray-900 font-bold text-sm border-2 border-accent bg-gray-50 p-3 italic">
+            {address}
+          </p>
         </div>
         
-        <div className="bg-gray-100 border-2 border-accent aspect-[4/3] flex items-center justify-center p-8 grayscale">
-           <MapPin className="w-16 h-16 text-primary animate-bounce" />
+        <div className="bg-gray-100 border-2 border-accent aspect-[4/3] flex flex-col items-center justify-center p-8 grayscale relative overflow-hidden">
+          <MapPin className={`w-16 h-16 text-primary ${loading ? 'animate-spin' : 'animate-bounce'}`} />
+          {loading && (
+            <div className="absolute inset-0 bg-white/80 backdrop-blur-[1px] flex flex-col items-center justify-center p-4">
+              <div className="animate-spin text-primary border-4 border-primary border-t-transparent w-8 h-8 mb-2"></div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-[#d32f2f]">Buscando sua rua...</p>
+            </div>
+          )}
         </div>
         
-        <button 
-          onClick={() => window.open('https://maps.google.com/?q=Rua+do+Posto+BR+Mania+Centro+Arari+MA', '_blank')}
-          className="btn-accent w-full"
-        >
-          COMO CHEGAR
-        </button>
+        <div className="flex flex-col gap-3">
+          <button 
+            onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(address)}`, '_blank')}
+            className="btn-accent w-full py-3 font-black text-xs shadow-[3px_3px_0_0_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5"
+          >
+            VER NO GOOGLE MAPS
+          </button>
+
+          {/* Sincronização de Localização (Brutalist panel) */}
+          <div className="border-2 border-primary p-4 bg-white/50 space-y-3 mt-2">
+            <h5 className="font-black uppercase text-[10px] tracking-widest text-primary">Sincronizar Localização</h5>
+            <p className="text-[9px] font-bold leading-tight uppercase text-gray-600">
+              Se você está na rua do seu restaurante agora, clique abaixo para salvar essa rua no aplicativo!
+            </p>
+            
+            {error && (
+              <p className="bg-[#ffebee] border-l-4 border-primary p-2 text-[9px] font-bold text-[#c62828] uppercase leading-snug">
+                {error}
+              </p>
+            )}
+
+            {success && (
+              <p className="bg-[#e8f5e9] border-l-4 border-green-700 p-2 text-[9px] font-bold text-green-800 uppercase leading-snug animate-pulse">
+                SUCESSO! Endereço do restaurante atualizado para o local atual.
+              </p>
+            )}
+
+            <div className="flex gap-2">
+              <button
+                disabled={loading}
+                onClick={handleGetLocation}
+                className="flex-1 bg-primary text-white border-2 border-accent p-2 font-black text-[9px] uppercase tracking-tighter hover:bg-[#b71c1c] active:translate-y-0.5 disabled:opacity-50"
+              >
+                {loading ? 'OBTENDO...' : '📍 CAPTURAR MINHA RUA AGORA'}
+              </button>
+              
+              {address !== defaultAddr && (
+                <button
+                  onClick={handleReset}
+                  className="bg-gray-100 hover:bg-gray-200 text-accent border-2 border-accent p-2 font-black text-[9px] uppercase"
+                  title="Restaurar endereço inicial"
+                >
+                  RESTAURAR
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -830,7 +1017,7 @@ function ContactView({ onBack }: { onBack: () => void }) {
     <div className="px-6 space-y-6 pb-12">
       <SectionHeader title="Contatos" onBack={onBack} />
       <div className="grid grid-cols-1 gap-4">
-        <ContactBox icon={<MessageCircle />} label="WhatsApp" value="(98) 99999-9999" href="https://wa.me/5598999999999" />
+        <ContactBox icon={<MessageCircle />} label="WhatsApp" value="(98) 98104-9475" href="https://wa.me/5598981049475" />
         <ContactBox icon={<Phone />} label="Telefone" value="(98) 3333-3333" href="tel:559833333333" />
         <ContactBox icon={<Instagram />} label="Instagram" value="@temperonordestino" href="https://instagram.com" />
       </div>
@@ -853,15 +1040,62 @@ function ContactBox({ icon, label, value, href }: { icon: React.ReactNode, label
 }
 
 function DrinksView({ onAdd, onBack, onShowBenefits }: { onAdd: (item: MenuItem) => void, onBack: () => void, onShowBenefits: (item: MenuItem) => void }) {
+  const [filter, setFilter] = useState<'todos' | 'sucos' | 'refrigerantes'>('todos');
+  
   const drinks = MENU_ITEMS.filter(item => item.category === 'Bebidas');
+  
+  const filteredDrinks = drinks.filter(item => {
+    const isJuice = item.name.toLowerCase().includes('suco');
+    if (filter === 'sucos') return isJuice;
+    if (filter === 'refrigerantes') return !isJuice;
+    return true;
+  });
   
   return (
     <div className="px-6 space-y-6 pb-12">
       <SectionHeader title="Bebidas" onBack={onBack} />
+      
+      {/* Filters (Juice / Soda / All) */}
+      <div className="grid grid-cols-3 gap-2">
+        <button
+          onClick={() => setFilter('todos')}
+          className={`py-3 px-1 text-[11px] font-black uppercase border-2 border-accent transition-all duration-150 ${
+            filter === 'todos'
+              ? 'bg-primary text-white shadow-[2px_2px_0_0_rgba(0,0,0,1)] translate-x-[1px] translate-y-[1px]'
+              : 'bg-white text-accent hover:bg-gray-100 shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-[-1px]'
+          }`}
+        >
+          Todos
+        </button>
+        <button
+          onClick={() => setFilter('sucos')}
+          className={`py-3 px-1 text-[11px] font-black uppercase border-2 border-accent transition-all duration-150 ${
+            filter === 'sucos'
+              ? 'bg-primary text-white shadow-[2px_2px_0_0_rgba(0,0,0,1)] translate-x-[1px] translate-y-[1px]'
+              : 'bg-white text-accent hover:bg-gray-100 shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-[-1px]'
+          }`}
+        >
+          Sucos
+        </button>
+        <button
+          onClick={() => setFilter('refrigerantes')}
+          className={`py-3 px-1 text-[11px] font-black uppercase border-2 border-accent transition-all duration-150 ${
+            filter === 'refrigerantes'
+              ? 'bg-primary text-white shadow-[2px_2px_0_0_rgba(0,0,0,1)] translate-x-[1px] translate-y-[1px]'
+              : 'bg-white text-accent hover:bg-gray-100 shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-[-1px]'
+          }`}
+        >
+          Refri
+        </button>
+      </div>
+
       <div className="space-y-6">
-        {drinks.map(item => (
+        {filteredDrinks.map(item => (
           <BrutalistFoodCard key={item.id} item={item} onAdd={() => onAdd(item)} onShowBenefits={() => onShowBenefits(item)} />
         ))}
+        {filteredDrinks.length === 0 && (
+          <p className="text-gray-500 font-bold text-center py-8">Nenhum item encontrado.</p>
+        )}
       </div>
     </div>
   );
