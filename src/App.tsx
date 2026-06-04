@@ -366,47 +366,58 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col max-w-md mx-auto shadow-2xl relative overflow-hidden nordeste-pattern">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 max-w-md mx-auto bg-primary text-white z-40 heavy-border-bottom flex flex-col px-6 py-6 pb-4">
-        <div className="flex justify-between items-start mb-4">
-          <div className="flex flex-col cursor-pointer" onClick={() => setCurrentView(View.HOME)}>
-            <h1 className="text-4xl text-white leading-[0.8] mb-1">
-              Tempero<br />Nordestino
-            </h1>
-            <p className="text-[10px] font-bold opacity-80 letter-spacing-[0.05em]">Desde 2010 • Arari - MA</p>
+    <div className="min-h-screen bg-orange-50/10 flex flex-col max-w-md mx-auto shadow-2xl relative overflow-hidden nordeste-pattern pb-28 animate-fade-in">
+      {/* Header - Modern curved premium food bar */}
+      <header className="fixed top-0 left-0 right-0 max-w-md mx-auto bg-gradient-to-b from-primary to-primary-dark text-white z-40 rounded-b-3xl shadow-lg shadow-orange-900/20 flex flex-col px-6 py-5 pb-5">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setCurrentView(View.HOME)}>
+            <div className="w-11 h-11 rounded-xl bg-white overflow-hidden flex items-center justify-center border border-white/25 shadow-md">
+              <img 
+                src="https://lh3.googleusercontent.com/d/1ndBUVNX6IZ8-MNxrApnYbXi07uAcUilq" 
+                alt="Logo Tempero Nordestino" 
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <div className="flex flex-col">
+              <h1 className="text-xl font-display font-black tracking-tight text-white leading-tight">
+                Tempero <span className="text-orange-300">Nordestino</span>
+              </h1>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <p className="text-[9px] font-bold tracking-wider text-orange-100 uppercase opacity-95">Comida Caseira • Desde 2010</p>
+              </div>
+            </div>
           </div>
           
           <button 
             onClick={() => setCurrentView(View.ORDERS)}
-            className="relative p-3 bg-accent text-white border-2 border-white hover:bg-gray-900 transition-colors"
+            className="relative p-3.5 rounded-full bg-white text-slate-900 border border-orange-100 shadow-md hover:scale-105 active:scale-95 transition-all duration-300"
           >
-            <ShoppingCart className="w-6 h-6" />
+            <ShoppingCart className="w-5 h-5 text-primary" />
             {cartCount > 0 && (
               <motion.span 
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="absolute -top-2 -right-2 bg-white text-primary text-[10px] font-black w-5 h-5 border-2 border-primary flex items-center justify-center"
+                className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-black w-5 h-5 rounded-full border-2 border-white flex items-center justify-center shadow"
               >
                 {cartCount}
               </motion.span>
             )}
           </button>
         </div>
-        <div className="bg-black text-[10px] font-bold py-1 px-3 self-end inline-block uppercase tracking-widest text-white">
-          Comida Caseira Legitima
-        </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 pt-44 pb-24 overflow-y-auto">
+      <main className="flex-1 pt-32 pb-4 overflow-y-auto w-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentView}
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 0.15 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="w-full"
           >
             {renderView()}
           </motion.div>
@@ -424,14 +435,15 @@ export default function App() {
       </AnimatePresence>
 
       {/* Credit Line */}
-      <div className="fixed bottom-20 left-0 right-0 max-w-md mx-auto pointer-events-none z-30 flex justify-center px-6">
-        <div className="bg-white/90 backdrop-blur-sm border border-accent/20 px-3 py-1 flex items-center gap-2 shadow-sm">
-          <span className="text-[8px] font-black uppercase tracking-widest text-accent/50">Exclusive App • Created by Jonatas Eduardo</span>
+      <div className="fixed bottom-24 left-0 right-0 max-w-md mx-auto pointer-events-none z-30 flex justify-center px-6">
+        <div className="bg-white/95 backdrop-blur-md border border-orange-100 px-4 py-1.5 rounded-full flex items-center gap-2 shadow-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+          <span className="text-[9px] font-bold tracking-tight text-slate-500">App Exclusivo • Criado por Jonatas Eduardo</span>
         </div>
       </div>
 
-      {/* Persistent Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-accent text-white border-t-4 border-primary flex justify-around py-3 px-3 z-40">
+      {/* Persistent Navigation - Glass-morphic Rounded Floating Tab Bar */}
+      <nav className="fixed bottom-4 left-6 right-6 max-w-[calc(100vw-3rem)] md:max-w-[25rem] mx-auto bg-white/95 backdrop-blur-md rounded-2xl border border-orange-100/50 flex justify-around py-2 px-2 z-40 shadow-xl shadow-slate-900/10">
         <NavButton active={currentView === View.HOME} icon={<Utensils />} label="Início" onClick={() => setCurrentView(View.HOME)} />
         <NavButton active={currentView === View.MENU} icon={<Award />} label="Cardápio" onClick={() => setCurrentView(View.MENU)} />
         <NavButton active={currentView === View.DRINKS} icon={<Coffee />} label="Bebidas" onClick={() => setCurrentView(View.DRINKS)} />
@@ -446,10 +458,14 @@ function NavButton({ active, icon, label, onClick }: { active: boolean, icon: Re
   return (
     <button 
       onClick={onClick}
-      className={`flex flex-col items-center gap-1 transition-all ${active ? 'text-primary' : 'text-white/60 hover:text-white'}`}
+      className={`flex flex-col items-center gap-1 transition-all duration-300 px-3 py-1.5 rounded-xl ${
+        active 
+          ? 'text-primary scale-105 font-semibold bg-orange-50/50' 
+          : 'text-slate-400 hover:text-slate-600 hover:scale-105'
+      }`}
     >
-      {React.cloneElement(icon as React.ReactElement, { className: 'w-5 h-5' })}
-      <span className="text-[10px] font-black uppercase tracking-wider">{label}</span>
+      {React.cloneElement(icon as React.ReactElement, { className: 'w-5 h-5 transition-transform duration-300' })}
+      <span className="text-[9px] font-bold tracking-tight uppercase">{label}</span>
     </button>
   );
 }
@@ -458,11 +474,11 @@ function NavButton({ active, icon, label, onClick }: { active: boolean, icon: Re
 
 function SectionHeader({ title, onBack }: { title: string, onBack: () => void }) {
   return (
-    <div className="flex items-center gap-4 mb-8 bg-white border-2 border-accent p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
-      <button onClick={onBack} className="p-1 hover:bg-gray-100 transition-colors">
-        <ArrowLeft className="w-6 h-6 text-primary" />
+    <div className="flex items-center gap-4 mb-6 bg-white/70 backdrop-blur-md border border-orange-100/50 p-3.5 rounded-2xl shadow-sm">
+      <button onClick={onBack} className="p-2.5 rounded-xl text-primary bg-orange-50/70 hover:bg-orange-100/70 transition-all duration-300">
+        <ArrowLeft className="w-5 h-5" />
       </button>
-      <h2 className="text-2xl font-black text-gray-900 uppercase m-0">{title}</h2>
+      <h2 className="text-lg font-display font-black text-slate-800 m-0 uppercase tracking-tight">{title}</h2>
     </div>
   );
 }
@@ -471,134 +487,135 @@ function SectionHeader({ title, onBack }: { title: string, onBack: () => void })
 
 function HomeView({ setView }: { setView: (v: View) => void }) {
   return (
-    <div className="space-y-6">
-      {/* Flyer Destaque - VERSÃO MAXIMIZADA */}
+    <div className="space-y-6 pb-12">
+      {/* Modern Top Info Banner */}
       <div className="px-6">
-        <div className="bg-accent text-white overflow-hidden mb-4 border-2 border-primary py-1">
-          <div className="whitespace-nowrap animate-marquee flex gap-8 font-black uppercase text-xs">
-            <span>Aplicativo Exclusivo • Tempero Nordestino • Aplicativo Exclusivo • Tempero Nordestino • Aplicativo Exclusivo • Tempero Nordestino</span>
-            <span>Aplicativo Exclusivo • Tempero Nordestino • Aplicativo Exclusivo • Tempero Nordestino • Aplicativo Exclusivo • Tempero Nordestino</span>
+        <div className="bg-gradient-to-r from-orange-600 to-amber-600 text-white overflow-hidden mb-5 rounded-2xl shadow-sm py-2 px-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-orange-200 animate-ping"></span>
+            <span className="font-display font-bold text-xs uppercase tracking-wider">DELIVERY FREE</span>
           </div>
+          <span className="text-base bg-white/20 px-2.5 py-1 rounded-full flex items-center justify-center">🏍️</span>
         </div>
 
-        {/* DELIVERY HIGHLIGHT */}
-        <div className="bg-primary text-white p-4 border-4 border-accent shadow-[6px_6px_0_0_rgba(0,0,0,1)] mb-6 flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <Truck className="w-5 h-5" />
-              <span className="font-black uppercase tracking-tighter text-sm">Delivery Aberto</span>
-            </div>
-            <p className="text-[10px] font-bold uppercase opacity-90">Peça agora no conforto da sua casa!</p>
-          </div>
-          <button 
-            onClick={() => setView(View.MENU)}
-            className="bg-white text-accent font-black text-xs px-3 py-2 border-2 border-accent shadow-[3px_3px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all uppercase"
-          >
-            Fazer Pedido
-          </button>
-        </div>
-
+        {/* Premium Styled Flyer Frame */}
         <motion.div 
-          initial={{ rotate: -1, scale: 0.95 }}
-          animate={{ rotate: 0, scale: 1 }}
-          className="bg-white border-4 border-accent p-3 shadow-[12px_12px_0_0_rgba(211,47,47,1)] mb-6 overflow-hidden"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-[#FAF7F2] border border-orange-100 p-3.5 rounded-3xl shadow-lg mb-6 group relative overflow-hidden"
         >
-          <div 
-            className="aspect-[3/4] bg-white border-4 border-accent overflow-hidden relative"
-          >
+          <div className="bg-white rounded-2xl overflow-hidden shadow-inner relative flex items-center justify-center p-1.5 border border-orange-50">
             <img 
               src="https://lh3.googleusercontent.com/d/1ndBUVNX6IZ8-MNxrApnYbXi07uAcUilq" 
               alt="Flyer Tempero Nordestino" 
-              className="w-full h-full object-contain"
+              className="w-full h-auto object-contain max-h-[400px] rounded-xl transition-transform duration-500 group-hover:scale-[1.02]"
               referrerPolicy="no-referrer"
             />
           </div>
         </motion.div>
       </div>
 
-      {/* Featured Suggestion */}
+      {/* Featured Suggestion Card */}
       <div className="px-6">
-        <div className="bg-white border-4 border-primary p-6 relative">
-          <span className="bg-primary text-white px-3 py-1 text-[10px] font-black absolute -top-3 right-4 uppercase tracking-tighter">
-            Sugestão de Hoje
+        <div className="bg-gradient-to-br from-slate-900 to-slate-850 text-white rounded-3xl p-6 relative shadow-xl overflow-hidden">
+          {/* Subtle light leak decoration background */}
+          <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-primary/20 blur-2xl"></div>
+          
+          <span className="bg-primary text-[10px] font-display font-extrabold px-3 py-1 rounded-full absolute top-5 right-5 uppercase tracking-wider">
+            Recomendado
           </span>
-          <h2 className="text-2xl mb-2">Carne de Sol Completa</h2>
-          <p className="text-gray-600 text-sm mb-4 font-medium">Acompanha: arroz, feijão, macarrão, purê, farofa e salada.</p>
-          <div className="flex justify-between items-center">
-             <span className="text-3xl font-black text-primary italic">R$ 20,00</span>
-             <button onClick={() => setView(View.MENU)} className="btn-accent py-2 px-4 text-xs">Pedir Agora</button>
+          
+          <p className="text-orange-400 font-display font-bold text-xs uppercase tracking-widest mb-1">Destaque da Casa</p>
+          <h2 className="text-2xl font-display font-extrabold text-white mb-2 leading-snug">Carne de Sol Completa</h2>
+          <p className="text-slate-300 text-xs mb-5 font-medium leading-relaxed max-w-[85%]">
+            Deliciosa carne curada na casa com arroz soltinho, feijão cremoso, purê e farofa tradicional.
+          </p>
+          
+          <div className="flex justify-between items-center pt-2 border-t border-white/10">
+             <div className="flex flex-col">
+               <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Preço Especial</span>
+               <span className="text-2xl font-display font-black text-orange-200">R$ 20,00</span>
+             </div>
+             <button 
+               onClick={() => setView(View.MENU)} 
+               className="bg-white text-slate-900 font-display font-extrabold text-xs px-5 py-3 rounded-xl hover:bg-orange-50 active:scale-95 transition-all duration-300"
+             >
+               Adicionar
+             </button>
           </div>
         </div>
       </div>
 
-      {/* Highlight Delivery Section */}
-      <div className="px-6 mb-2">
-        <button 
-          onClick={() => setView(View.MENU)}
-          className="w-full bg-primary text-white border-4 border-accent p-4 shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex items-center justify-between group"
-        >
-          <div className="flex items-center gap-4">
-            <div className="bg-white text-primary p-2 border-2 border-accent group-hover:rotate-12 transition-transform">
-              <Truck className="w-8 h-8" />
-            </div>
-            <div className="text-left">
-              <h3 className="font-black text-xl uppercase italic leading-none">Peça Delivery</h3>
-              <p className="text-[10px] font-bold uppercase opacity-80 mt-1 tracking-widest">Entrega rápida em toda região</p>
-            </div>
-          </div>
-          <ChevronRight className="w-6 h-6" />
-        </button>
-      </div>
-
-      {/* Grid Menu */}
-      <div className="px-6 grid grid-cols-2 gap-4">
-        <GridButton 
-          icon={<Utensils className="w-8 h-8" />} 
-          label="Cardápio" 
-          onClick={() => setView(View.MENU)} 
-          isBlack
-        />
-        <GridButton 
-          icon={<Coffee className="w-8 h-8" />} 
-          label="Bebidas" 
-          onClick={() => setView(View.DRINKS)} 
-        />
-        <GridButton 
-          icon={<ShoppingCart className="w-8 h-8" />} 
-          label="Pedidos" 
-          onClick={() => setView(View.ORDERS)} 
-        />
-        <GridButton 
-          icon={<Star className="w-8 h-8" />} 
-          label="Favoritos" 
-          onClick={() => setView(View.POPULAR)} 
-        />
-        <GridButton 
-          icon={<Tag className="w-8 h-8" />} 
-          label="Promoções" 
-          onClick={() => setView(View.PROMOS)} 
-        />
-        <GridButton 
-          icon={<MapPin className="w-8 h-8" />} 
-          label="Onde Estamos" 
-          onClick={() => setView(View.LOCATION)} 
-        />
-        <div className="col-span-2">
+      {/* Grid Menu Section */}
+      <div className="px-6 space-y-4">
+        <h3 className="font-display font-black text-base text-slate-800 uppercase tracking-wider px-1">Navegar por Categorias</h3>
+        <div className="grid grid-cols-2 gap-4">
           <GridButton 
-            icon={<Info className="w-8 h-8" />} 
-            label="Sobre Nossa História" 
-            onClick={() => setView(View.ABOUT)} 
+            icon={<Utensils className="w-6 h-6" />} 
+            label="Cardápio" 
+            desc="Pratos quentes e caseiros"
+            onClick={() => setView(View.MENU)} 
+            isHighlight
+          />
+          <GridButton 
+            icon={<Coffee className="w-6 h-6" />} 
+            label="Bebidas" 
+            desc="Sucos da fruta e refris"
+            onClick={() => setView(View.DRINKS)} 
+          />
+          <GridButton 
+            icon={<ShoppingCart className="w-6 h-6" />} 
+            label="Seu Pedido" 
+            desc="Ver itens da sacola"
+            onClick={() => setView(View.ORDERS)} 
+          />
+          <GridButton 
+            icon={<Star className="w-6 h-6" />} 
+            label="Mais Pedidos" 
+            desc="Os favoritos de Arari"
+            onClick={() => setView(View.POPULAR)} 
+          />
+          <GridButton 
+            icon={<Tag className="w-6 h-6" />} 
+            label="Promoções" 
+            desc="Combos imbatíveis"
+            onClick={() => setView(View.PROMOS)} 
+          />
+          <GridButton 
+            icon={<MapPin className="w-6 h-6" />} 
+            label="Localização" 
+            desc="Visite nosso restaurante"
+            onClick={() => setView(View.LOCATION)} 
           />
         </div>
+        
+        <div className="pt-2">
+          <button 
+            onClick={() => setView(View.ABOUT)}
+            className="w-full bg-white border border-orange-100 hover:border-orange-200 p-4 rounded-2xl shadow-sm transition-all flex items-center justify-between group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="bg-orange-50 text-primary p-2.5 rounded-xl group-hover:rotate-6 transition-transform duration-300">
+                <Info className="w-5 h-5" />
+              </div>
+              <div className="text-left">
+                <h4 className="font-display font-bold text-sm text-slate-800">Sobre Nossa História</h4>
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Tradição em Arari desde 2010</p>
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-slate-400" />
+          </button>
+        </div>
       </div>
 
-      {/* Footer Info */}
+      {/* Footer Contact Option */}
       <div className="px-6 pb-6">
         <button 
           onClick={() => window.open('https://wa.me/5598981049475', '_blank')}
-          className="btn-primary w-full bg-[#25D366] border-black text-white hover:bg-[#128C7E]"
+          className="w-full bg-[#25D366] text-white hover:bg-[#1fbe54] p-4 rounded-2xl font-display font-bold text-sm tracking-wide shadow-lg shadow-green-600/10 hover:shadow-green-600/20 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2"
         >
-          <MessageCircle className="w-6 h-6" />
+          <MessageCircle className="w-5 h-5 fill-white" />
           FALE CONOSCO NO WHATSAPP
         </button>
       </div>
@@ -606,14 +623,39 @@ function HomeView({ setView }: { setView: (v: View) => void }) {
   );
 }
 
-function GridButton({ icon, label, onClick, isBlack = false }: { icon: React.ReactNode, label: string, onClick: () => void, isBlack?: boolean }) {
+function GridButton({ 
+  icon, 
+  label, 
+  desc, 
+  onClick, 
+  isHighlight = false 
+}: { 
+  icon: React.ReactNode; 
+  label: string; 
+  desc: string; 
+  onClick: () => void; 
+  isHighlight?: boolean; 
+}) {
   return (
     <button
       onClick={onClick}
-      className={`p-6 border-4 border-accent flex flex-col justify-between items-start h-32 transition-all hover:bg-primary group ${isBlack ? 'bg-accent text-white border-primary' : 'bg-white text-accent'}`}
+      className={`p-4 rounded-2xl border text-left h-32 flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 shadow-sm hover:shadow-md group ${
+        isHighlight 
+          ? 'bg-gradient-to-br from-primary to-orange-700 text-white border-transparent' 
+          : 'bg-white text-slate-800 border-orange-100/50 hover:border-orange-200'
+      }`}
     >
-      <div className={`transition-colors ${isBlack ? 'text-white' : 'text-primary group-hover:text-white'}`}>{icon}</div>
-      <span className={`font-black uppercase tracking-tighter text-sm transition-colors ${isBlack ? 'text-white' : 'text-accent group-hover:text-white'}`}>{label}</span>
+      <div className={`p-2 rounded-xl w-fit ${
+        isHighlight 
+          ? 'bg-white/10 text-orange-200 shadow-inner' 
+          : 'bg-orange-50 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300'
+      }`}>
+        {icon}
+      </div>
+      <div>
+        <span className="font-display font-extrabold text-sm block leading-tight">{label}</span>
+        <span className={`text-[9px] block mt-0.5 font-medium ${isHighlight ? 'text-orange-200/85' : 'text-slate-450 text-slate-400'}`}>{desc}</span>
+      </div>
     </button>
   );
 }
@@ -639,15 +681,15 @@ function BrutalistFoodCard({ item, onAdd, onShowBenefits }: { item: MenuItem, on
   const hasBenefits = item.benefits && (!isBeverage || isJuice);
 
   return (
-    <div className="bg-white border-2 border-accent overflow-hidden relative shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+    <div className="bg-white border border-orange-100/60 rounded-3xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group">
       <div 
-        className={`h-40 bg-gray-100 overflow-hidden relative cursor-pointer ${hasBenefits ? 'group' : ''}`}
+        className="h-44 bg-slate-50 overflow-hidden relative cursor-pointer"
         onClick={hasBenefits ? onShowBenefits : undefined}
       >
         <img 
           src={item.image} 
           alt={item.name} 
-          className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" 
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
           referrerPolicy="no-referrer"
           onError={(e) => {
             e.currentTarget.onerror = null;
@@ -662,35 +704,43 @@ function BrutalistFoodCard({ item, onAdd, onShowBenefits }: { item: MenuItem, on
             }
           }}
         />
+        {/* Category Tag overlay */}
+        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-primary font-display font-black text-[9px] uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm">
+          {item.category}
+        </div>
+        
         {hasBenefits && (
-          <div className="absolute top-2 left-2 bg-primary text-white p-1 shadow-[2px_2px_0_0_rgba(0,0,0,1)] animate-pulse">
-            <Info className="w-4 h-4" />
+          <div className="absolute top-3 right-3 bg-primary/95 text-white p-2.5 rounded-full shadow-md animate-pulse">
+            <Info className="w-3.5 h-3.5" />
           </div>
         )}
       </div>
-      <div className="p-4 bg-white border-t-2 border-accent">
-        <div className="flex justify-between items-start mb-2">
-          <h3 
-            className={`text-xl leading-none ${hasBenefits ? 'cursor-pointer hover:text-primary transition-colors' : ''}`}
-            onClick={hasBenefits ? onShowBenefits : undefined}
-          >
-            {item.name}
-          </h3>
-          <span className="text-xl font-black text-primary italic">R$ {item.price.toFixed(2)}</span>
+      <div className="p-5 bg-white space-y-4">
+        <div>
+          <div className="flex justify-between items-start gap-2">
+            <h3 
+              className={`text-lg font-display font-black text-slate-800 leading-tight ${hasBenefits ? 'cursor-pointer hover:text-primary transition-colors' : ''}`}
+              onClick={hasBenefits ? onShowBenefits : undefined}
+            >
+              {item.name}
+            </h3>
+            <span className="text-lg font-display font-black text-primary whitespace-nowrap">R$ {item.price.toFixed(2)}</span>
+          </div>
+          <p className="text-slate-400 text-xs mt-1.5 font-medium leading-relaxed">{item.description}</p>
         </div>
-        <p className="text-gray-500 text-xs mb-4 uppercase font-bold tracking-tight">{item.description}</p>
-        <div className="flex flex-col gap-2">
+        
+        <div className="space-y-2 pt-1">
           {hasBenefits && (
             <button 
               onClick={onShowBenefits}
-              className="w-full text-[10px] font-black p-1 mb-1 border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all uppercase tracking-tighter"
+              className="w-full text-[9px] font-display font-bold p-2 bg-orange-50/50 text-primary border border-orange-100 hover:bg-orange-100/50 transition-all rounded-xl uppercase tracking-wider"
             >
-              {item.category === 'Principais' ? 'Clique para ver os acompanhamentos!' : 'Clique para ver os benefícios à saúde!'}
+              {item.category === 'Principais' ? '🔎 Ver Acompanhamentos inclusos' : '🌿 Saúde: Ver benefícios naturais'}
             </button>
           )}
           <button 
             onClick={onAdd}
-            className="btn-accent w-full py-2 flex items-center justify-center gap-2 text-xs"
+            className="w-full py-3 rounded-xl bg-accent text-white font-display font-bold text-xs shadow-md shadow-slate-900/5 hover:bg-slate-800 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-1.5"
           >
             <Plus className="w-4 h-4" /> ADICIONAR AO PEDIDO
           </button>
@@ -706,55 +756,78 @@ function OrdersView({ cart, onAdd, onRemove, onCheckout, onBack }: { cart: CartI
   const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
   return (
-    <div className="px-6 space-y-6 flex flex-col">
+    <div className="px-6 space-y-6 flex flex-col pb-12">
       <SectionHeader title="Sua Cesta" onBack={onBack} />
 
       {cart.length === 0 ? (
-        <div className="border-4 border-dashed border-gray-200 p-12 text-center flex flex-col items-center gap-4">
-          <ShoppingCart className="w-12 h-12 text-gray-200" />
-          <p className="font-black text-gray-300 uppercase italic">Vazio...</p>
-          <button onClick={onBack} className="btn-outline w-full">VOLTAR AO CARDÁPIO</button>
+        <div className="border border-dashed border-orange-100 bg-orange-50/10 p-12 rounded-3xl text-center flex flex-col items-center gap-4">
+          <div className="p-4 bg-orange-50 text-primary rounded-full">
+            <ShoppingCart className="w-8 h-8" />
+          </div>
+          <p className="font-display font-bold text-slate-405 text-slate-400">Sua cesta está vazia</p>
+          <button 
+            onClick={onBack} 
+            className="w-full mt-2 py-3 rounded-xl bg-primary text-white font-display font-bold text-xs hover:bg-primary-dark transition-colors uppercase"
+          >
+            VOLTAR AO CARDÁPIO
+          </button>
         </div>
       ) : (
         <div className="space-y-4">
-          {cart.map(item => (
-            <div key={item.id} className="border-2 border-accent p-4 bg-white flex justify-between items-center shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
-              <div>
-                <h4 className="font-black uppercase text-sm">{item.name}</h4>
-                <p className="text-primary font-black italic">R$ {(item.price * item.quantity).toFixed(2)}</p>
+          {/* Card list */}
+          <div className="space-y-3">
+            {cart.map(item => (
+              <div key={item.id} className="border border-orange-100/55 p-3.5 bg-white rounded-2xl flex justify-between items-center shadow-sm">
+                <div>
+                  <h4 className="font-display font-black text-slate-800 text-sm">{item.name}</h4>
+                  <p className="text-primary font-display font-extrabold text-xs mt-0.5">R$ {(item.price * item.quantity).toFixed(2)}</p>
+                </div>
+                <div className="flex items-center gap-3 border border-orange-100 bg-orange-50/30 rounded-xl p-1 shadow-inner">
+                  <button onClick={() => onRemove(item.id)} className="p-1.5 hover:bg-orange-100/60 rounded-lg text-slate-500 hover:text-black transition-colors">
+                    <Minus className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="font-display font-black text-sm min-w-[20px] text-slate-800 text-center">{item.quantity}</span>
+                  <button onClick={() => onAdd(item)} className="p-1.5 hover:bg-orange-100/60 rounded-lg text-slate-500 hover:text-black transition-colors">
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-3 border-2 border-accent bg-gray-50 p-1">
-                <button onClick={() => onRemove(item.id)} className="p-1 hover:bg-gray-200"><Minus className="w-4 h-4" /></button>
-                <span className="font-black text-lg min-w-[30px] text-center">{item.quantity}</span>
-                <button onClick={() => onAdd(item)} className="p-1 hover:bg-gray-200"><Plus className="w-4 h-4" /></button>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
-          <div className="bg-accent text-white p-6 space-y-4 border-l-8 border-primary">
-            <div className="flex justify-between items-center text-xs opacity-60 font-bold uppercase tracking-widest">
-              <span>Subtotal</span>
+          {/* Delivery banner option status */}
+          <div className="bg-gradient-to-r from-slate-900 to-slate-850 text-white p-5 rounded-2xl space-y-2.5 shadow-md relative overflow-hidden">
+            <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
+            <div className="flex items-center gap-2 text-orange-400">
+               <Truck className="w-4 h-4 animate-bounce" />
+               <span className="text-[10px] font-display font-bold uppercase tracking-wider">Serviço Escolhido</span>
+            </div>
+            <h4 className="font-display font-extrabold text-sm uppercase">Delivery Inteligente</h4>
+            <p className="text-[10px] text-slate-400 font-medium uppercase mt-0.5">Faremos o envio no capricho direto para seu endereço cadastrado!</p>
+          </div>
+
+          {/* Subtotal summary card */}
+          <div className="bg-white border border-orange-100/60 p-5 rounded-2xl space-y-4 shadow-sm">
+            <div className="flex justify-between items-center text-xs text-slate-400 font-bold uppercase tracking-wider">
+              <span>Subtotal dos itens</span>
               <span>R$ {total.toFixed(2)}</span>
             </div>
-            <div className="h-px bg-white/20" />
+            <div className="h-px bg-orange-50" />
             <div className="flex justify-between items-end">
-              <span className="text-sm font-bold uppercase opacity-80">Total</span>
-              <span className="text-4xl font-black italic">R$ {total.toFixed(2)}</span>
+              <div>
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Total Geral</span>
+                <span className="text-3xl font-display font-black text-slate-800">R$ {total.toFixed(2)}</span>
+              </div>
+              <span className="text-[9px] bg-emerald-100/60 text-emerald-700 font-bold px-2 py-1 rounded-md uppercase tracking-wide">Sem taxa de entrega</span>
             </div>
           </div>
 
-          <div className="bg-accent text-white p-4 space-y-2 border-l-8 border-primary shadow-[4px_4px_0_0_rgba(0,0,0,1)] mb-4">
-             <div className="flex items-center gap-2 text-primary">
-               <Truck className="w-4 h-4 animate-bounce" />
-               <span className="text-[10px] font-black uppercase tracking-widest">Opção de Entrega Selecionada</span>
-             </div>
-             <h4 className="font-black text-lg uppercase italic">Delivery Tempero Nordestino</h4>
-             <p className="text-[10px] opacity-70 uppercase font-bold">Rápido, Quente e no Capricho!</p>
-          </div>
-
-          <button onClick={onCheckout} className="btn-primary w-full py-5 text-lg shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
-            <MessageCircle className="w-6 h-6" />
-            ENVIAR PEDIDO AGORA
+          <button 
+            onClick={onCheckout} 
+            className="w-full py-4 mt-2 rounded-2xl bg-[#25D366] text-white font-display font-extrabold text-sm tracking-wide shadow-lg shadow-green-600/10 hover:shadow-green-600/20 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2"
+          >
+            <MessageCircle className="w-5 h-5 fill-white" />
+            ENVIAR PEDIDO AGORA NO WHATSAPP
           </button>
         </div>
       )}
@@ -785,14 +858,15 @@ function PromosView({ promos, onBack }: { promos: typeof PROMOTIONS, onBack: () 
       <SectionHeader title="Promoções" onBack={onBack} />
       <div className="space-y-6">
         {promos.map(promo => (
-          <div key={promo.id} className="bg-white border-4 border-primary p-6 relative">
-            <div className="bg-accent text-white px-4 py-1 font-black absolute -top-4 left-4 uppercase tracking-tighter italic">
-              {promo.discount}
+          <div key={promo.id} className="bg-white border border-orange-100/50 p-6 rounded-3xl relative shadow-md overflow-hidden">
+            <div className="bg-primary text-white px-3 py-1 font-display font-bold text-[10px] absolute top-4 right-4 uppercase tracking-wider rounded-full shadow-sm">
+              {promo.discount} OFF
             </div>
-            <h4 className="text-2xl mb-2">{promo.title}</h4>
-            <p className="text-gray-600 text-sm font-medium mb-4">{promo.description}</p>
-            <button className="bg-primary text-white w-full py-3 font-bold uppercase tracking-widest text-xs border-2 border-accent">
-              APROVEITAR AGORA
+            <span className="text-orange-500 font-display font-extrabold text-[10px] uppercase tracking-widest block mb-1">Oferta do dia</span>
+            <h4 className="text-lg font-display font-black text-slate-800 mb-2 leading-snug">{promo.title}</h4>
+            <p className="text-slate-500 text-xs font-semibold leading-relaxed mb-5">{promo.description}</p>
+            <button className="bg-slate-900 text-white w-full py-3.5 rounded-xl font-display font-bold uppercase tracking-wider text-xs shadow-md hover:bg-slate-805 transition-all">
+              Aproveitar Oferta
             </button>
           </div>
         ))}
@@ -809,34 +883,36 @@ function AboutView({ onBack }: { onBack: () => void }) {
       <SectionHeader title="A Casa" onBack={onBack} />
       
       <div className="space-y-6">
-        <div className="border-4 border-accent p-2 bg-white">
-          <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=600" alt="Nossa história" className="w-full h-48 object-cover grayscale" />
+        <div className="border border-orange-100/60 p-2.5 bg-white rounded-3xl shadow-md overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=600" alt="Nossa história" className="w-full h-48 object-cover rounded-2xl" />
         </div>
         
         <div className="space-y-6">
-          <div className="bg-primary text-white p-4 italic font-black text-xl leading-tight">
-            "A MAIOR TRADIÇÃO DE ARARI DESDE 2010. COMIDA RAIZ!"
+          <div className="bg-gradient-to-r from-primary to-orange-850 text-white p-5 rounded-2xl shadow-sm text-center font-display font-extrabold italic text-lg leading-relaxed px-6">
+            "A maior tradição caseira de Arari desde 2010. Comida feita com amor e raízes!"
           </div>
-          <div className="space-y-4 text-gray-900 font-bold uppercase text-xs tracking-wider leading-relaxed">
+          <div className="space-y-4 text-slate-600 font-medium text-xs tracking-wide leading-relaxed bg-white/50 p-5 rounded-2xl border border-orange-100/30">
             <p>
-              O Tempero Nordestino não é apenas um restaurante. É um ponto de encontro para quem valoriza a culinária maranhense feita no capricho.
+              O <strong className="text-primary font-black">Tempero Nordestino</strong> não é apenas um restaurante. É um ponto de encontro tradicional na cidade de Arari - MA para quem valoriza a autêntica culinária regional feita com capricho e tempero familiar maranhense.
             </p>
             <p>
-              Ingredientes frescos, tempero de casa e aquele carinho que você já conhece há mais de uma década.
+              Ingredientes frescos da região, acompanhamentos deliciosos e aquele carinho caloroso que você já conhece há mais de uma década.
             </p>
           </div>
           
-          <div className="bg-accent text-white p-6 border-4 border-primary shadow-[8px_8px_0_0_rgba(0,0,0,1)] mt-8">
-            <h5 className="text-[10px] font-black uppercase tracking-[0.2em] mb-4 opacity-70">Desenvolvimento</h5>
+          <div className="bg-slate-900 text-white p-6 rounded-3xl space-y-4">
+            <h5 className="text-[10px] font-display font-black uppercase tracking-[0.2em] text-orange-400 opacity-90">Engenharia e Desenvolvimento</h5>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary flex items-center justify-center text-white font-black text-xl italic">JE</div>
+              <div className="w-11 h-11 rounded-xl bg-orange-55 flex items-center justify-center text-white font-display font-black text-lg bg-orange-500 shadow-inner">
+                JE
+              </div>
               <div>
-                <p className="text-sm font-black uppercase m-0 leading-none">Jonatas Eduardo</p>
-                <p className="text-[8px] font-bold opacity-60 uppercase tracking-tighter">Creator & Developer</p>
+                <p className="text-sm font-display font-black tracking-tight text-white">Jonatas Eduardo</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Creator & Fullstack Developer</p>
               </div>
             </div>
-            <div className="mt-4 pt-4 border-t border-white/20 text-[10px] font-medium leading-tight">
-              ESTE APLICATIVO É UMA FERRAMENTA EXCLUSIVA DESENVOLVIDA PARA O TEMPERO NORDESTINO.
+            <div className="pt-3 border-t border-white/10 text-[10px] text-slate-350 leading-relaxed font-medium">
+              ESTE APLICATIVO É UMA FERRAMENTA EXCLUSIVA E TOTALMENTE PERSONALIZADA DESENVOLVIDA PARA O RESTAURANTE TEMPERO NORDESTINO.
             </div>
           </div>
         </div>
@@ -938,21 +1014,25 @@ function LocationView({
     <div className="px-6 space-y-6 pb-12">
       <SectionHeader title="Visite-nos" onBack={onBack} />
       
-      <div className="border-4 border-accent bg-white p-6 space-y-6 shadow-[6px_6px_0_0_rgba(0,0,0,1)]">
+      <div className="bg-white border border-orange-100/50 p-5 rounded-3xl space-y-6 shadow-md">
         <div>
-          <h4 className="text-2xl font-black uppercase italic leading-none mb-2">Restaurante</h4>
-          <p className="text-primary font-black uppercase text-[10px] tracking-widest mb-2">Localização no App • Centro Arari</p>
-          <p className="text-gray-900 font-bold text-sm border-2 border-accent bg-gray-50 p-3 italic">
+          <span className="text-orange-500 font-display font-extrabold text-[10px] uppercase tracking-widest block mb-1">Nosso endereço</span>
+          <h4 className="text-xl font-display font-black text-slate-800 leading-none mb-3">Restaurante Físico</h4>
+          
+          <div className="text-slate-700 font-display font-bold text-xs border border-orange-100 bg-orange-50/20 p-4 rounded-2xl italic leading-relaxed">
             {address}
-          </p>
+          </div>
         </div>
         
-        <div className="bg-gray-100 border-2 border-accent aspect-[4/3] flex flex-col items-center justify-center p-8 grayscale relative overflow-hidden">
-          <MapPin className={`w-16 h-16 text-primary ${loading ? 'animate-spin' : 'animate-bounce'}`} />
+        {/* Map visualization panel */}
+        <div className="bg-slate-50 border border-orange-100 aspect-[4/3] flex flex-col items-center justify-center p-8 rounded-2xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-400/5 to-transparent pointer-events-none"></div>
+          <MapPin className={`w-12 h-12 text-primary ${loading ? 'animate-pulse' : 'animate-bounce'}`} />
+          
           {loading && (
-            <div className="absolute inset-0 bg-white/80 backdrop-blur-[1px] flex flex-col items-center justify-center p-4">
-              <div className="animate-spin text-primary border-4 border-primary border-t-transparent w-8 h-8 mb-2"></div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-[#d32f2f]">Buscando sua rua...</p>
+            <div className="absolute inset-0 bg-white/90 backdrop-blur-[1px] flex flex-col items-center justify-center p-4">
+              <div className="animate-spin text-primary border-4 border-primary border-t-transparent w-7 h-7 rounded-full mb-3"></div>
+              <p className="text-[10px] font-display font-black uppercase tracking-wider text-slate-800">Sincronizando coordenadas...</p>
             </div>
           )}
         </div>
@@ -960,27 +1040,27 @@ function LocationView({
         <div className="flex flex-col gap-3">
           <button 
             onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(address)}`, '_blank')}
-            className="btn-accent w-full py-3 font-black text-xs shadow-[3px_3px_0_0_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5"
+            className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-display font-bold text-xs rounded-xl shadow-md transition-all duration-300"
           >
-            VER NO GOOGLE MAPS
+            🗺️ VER NO GOOGLE MAPS
           </button>
 
-          {/* Sincronização de Localização (Brutalist panel) */}
-          <div className="border-2 border-primary p-4 bg-white/50 space-y-3 mt-2">
-            <h5 className="font-black uppercase text-[10px] tracking-widest text-primary">Sincronizar Localização</h5>
-            <p className="text-[9px] font-bold leading-tight uppercase text-gray-600">
+          {/* Sincronização de Localização - Elegant Panel */}
+          <div className="border border-orange-100 p-4 bg-orange-50/10 rounded-2xl space-y-3 mt-2">
+            <h5 className="font-display font-extrabold uppercase text-[10px] tracking-wide text-primary">Sincronizar Localização</h5>
+            <p className="text-[9px] font-bold leading-tight uppercase text-slate-500">
               Se você está na rua do seu restaurante agora, clique abaixo para salvar essa rua no aplicativo!
             </p>
             
             {error && (
-              <p className="bg-[#ffebee] border-l-4 border-primary p-2 text-[9px] font-bold text-[#c62828] uppercase leading-snug">
+              <p className="bg-red-50 border-l-4 border-red-500 p-2 text-[9px] font-bold text-red-600 rounded-r-lg uppercase leading-snug">
                 {error}
               </p>
             )}
 
             {success && (
-              <p className="bg-[#e8f5e9] border-l-4 border-green-700 p-2 text-[9px] font-bold text-green-800 uppercase leading-snug animate-pulse">
-                SUCESSO! Endereço do restaurante atualizado para o local atual.
+              <p className="bg-emerald-50 border-l-4 border-emerald-500 p-2 text-[9px] font-bold text-emerald-800 rounded-r-lg uppercase leading-snug animate-pulse">
+                Salvo! Endereço atualizado com sucesso para sua rua atual.
               </p>
             )}
 
@@ -988,15 +1068,15 @@ function LocationView({
               <button
                 disabled={loading}
                 onClick={handleGetLocation}
-                className="flex-1 bg-primary text-white border-2 border-accent p-2 font-black text-[9px] uppercase tracking-tighter hover:bg-[#b71c1c] active:translate-y-0.5 disabled:opacity-50"
+                className="flex-1 bg-primary text-white hover:bg-primary-dark p-2.5 rounded-lg font-display font-bold text-[9px] uppercase tracking-wide transition-all disabled:opacity-50"
               >
-                {loading ? 'OBTENDO...' : '📍 CAPTURAR MINHA RUA AGORA'}
+                {loading ? 'OBTENDO...' : '📍 CAPTURAR LOCAL ATUAL'}
               </button>
               
               {address !== defaultAddr && (
                 <button
                   onClick={handleReset}
-                  className="bg-gray-100 hover:bg-gray-200 text-accent border-2 border-accent p-2 font-black text-[9px] uppercase"
+                  className="bg-white hover:bg-orange-50 text-slate-650 border border-orange-100 p-2.5 rounded-lg font-display font-bold text-[9px] uppercase tracking-wide transition-all"
                   title="Restaurar endereço inicial"
                 >
                   RESTAURAR
@@ -1017,9 +1097,9 @@ function ContactView({ onBack }: { onBack: () => void }) {
     <div className="px-6 space-y-6 pb-12">
       <SectionHeader title="Contatos" onBack={onBack} />
       <div className="grid grid-cols-1 gap-4">
-        <ContactBox icon={<MessageCircle />} label="WhatsApp" value="(98) 98104-9475" href="https://wa.me/5598981049475" />
-        <ContactBox icon={<Phone />} label="Telefone" value="(98) 3333-3333" href="tel:559833333333" />
-        <ContactBox icon={<Instagram />} label="Instagram" value="@temperonordestino" href="https://instagram.com" />
+        <ContactBox icon={<MessageCircle className="w-5 h-5 text-[#25D366]" />} label="WhatsApp" value="(98) 98104-9475" href="https://wa.me/5598981049475" />
+        <ContactBox icon={<Phone className="w-5 h-5 text-primary" />} label="Telefone" value="(98) 3333-3333" href="tel:559833333333" />
+        <ContactBox icon={<Instagram className="w-5 h-5 text-pink-650" />} label="Instagram" value="@temperonordestino" href="https://instagram.com" />
       </div>
     </div>
   );
@@ -1027,13 +1107,13 @@ function ContactView({ onBack }: { onBack: () => void }) {
 
 function ContactBox({ icon, label, value, href }: { icon: React.ReactNode, label: string, value: string, href: string }) {
   return (
-    <a href={href} target="_blank" rel="noreferrer" className="flex items-center gap-4 border-2 border-accent p-4 bg-white hover:bg-primary hover:text-white transition-all group">
-      <div className="bg-primary p-3 text-white group-hover:bg-white group-hover:text-primary transition-all">
+    <a href={href} target="_blank" rel="noreferrer" className="flex items-center gap-4 border border-orange-100/50 p-4 bg-white hover:border-orange-200 rounded-2xl shadow-sm transition-all duration-300 group">
+      <div className="p-3 bg-orange-50/50 rounded-xl group-hover:bg-primary/10 transition-all duration-300">
         {icon}
       </div>
       <div>
-        <h4 className="text-[10px] opacity-60 m-0">{label}</h4>
-        <p className="text-lg font-black m-0">{value}</p>
+        <h4 className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{label}</h4>
+        <p className="text-base font-display font-black text-slate-800 m-0">{value}</p>
       </div>
     </a>
   );
@@ -1056,33 +1136,33 @@ function DrinksView({ onAdd, onBack, onShowBenefits }: { onAdd: (item: MenuItem)
       <SectionHeader title="Bebidas" onBack={onBack} />
       
       {/* Filters (Juice / Soda / All) */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="bg-orange-50/40 border border-orange-100/55 p-1 rounded-2xl grid grid-cols-3 gap-1">
         <button
           onClick={() => setFilter('todos')}
-          className={`py-3 px-1 text-[11px] font-black uppercase border-2 border-accent transition-all duration-150 ${
+          className={`py-2.5 rounded-xl text-xs font-display font-bold uppercase transition-all duration-300 ${
             filter === 'todos'
-              ? 'bg-primary text-white shadow-[2px_2px_0_0_rgba(0,0,0,1)] translate-x-[1px] translate-y-[1px]'
-              : 'bg-white text-accent hover:bg-gray-100 shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-[-1px]'
+              ? 'bg-primary text-white shadow-sm'
+              : 'text-slate-500 hover:text-slate-800'
           }`}
         >
           Todos
         </button>
         <button
           onClick={() => setFilter('sucos')}
-          className={`py-3 px-1 text-[11px] font-black uppercase border-2 border-accent transition-all duration-150 ${
+          className={`py-2.5 rounded-xl text-xs font-display font-bold uppercase transition-all duration-300 ${
             filter === 'sucos'
-              ? 'bg-primary text-white shadow-[2px_2px_0_0_rgba(0,0,0,1)] translate-x-[1px] translate-y-[1px]'
-              : 'bg-white text-accent hover:bg-gray-100 shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-[-1px]'
+              ? 'bg-primary text-white shadow-sm'
+              : 'text-slate-500 hover:text-slate-800'
           }`}
         >
           Sucos
         </button>
         <button
           onClick={() => setFilter('refrigerantes')}
-          className={`py-3 px-1 text-[11px] font-black uppercase border-2 border-accent transition-all duration-150 ${
+          className={`py-2.5 rounded-xl text-xs font-display font-bold uppercase transition-all duration-300 ${
             filter === 'refrigerantes'
-              ? 'bg-primary text-white shadow-[2px_2px_0_0_rgba(0,0,0,1)] translate-x-[1px] translate-y-[1px]'
-              : 'bg-white text-accent hover:bg-gray-100 shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-[-1px]'
+              ? 'bg-primary text-white shadow-sm'
+              : 'text-slate-500 hover:text-slate-800'
           }`}
         >
           Refri
@@ -1094,7 +1174,7 @@ function DrinksView({ onAdd, onBack, onShowBenefits }: { onAdd: (item: MenuItem)
           <BrutalistFoodCard key={item.id} item={item} onAdd={() => onAdd(item)} onShowBenefits={() => onShowBenefits(item)} />
         ))}
         {filteredDrinks.length === 0 && (
-          <p className="text-gray-500 font-bold text-center py-8">Nenhum item encontrado.</p>
+          <p className="text-slate-400 font-display font-medium text-center py-8">Nenhum item encontrado.</p>
         )}
       </div>
     </div>
@@ -1107,41 +1187,39 @@ function BenefitsModal({ item, onClose }: { item: MenuItem, onClose: () => void 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-[3px]"
       onClick={onClose}
     >
       <motion.div 
-        initial={{ scale: 0.9, y: 20 }}
+        initial={{ scale: 0.95, y: 15 }}
         animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: 20 }}
-        className="bg-white border-4 border-primary p-6 max-w-sm w-full shadow-[8px_8px_0_0_rgba(0,0,0,1)]"
+        exit={{ scale: 0.95, y: 15 }}
+        className="bg-white border border-orange-100 p-6 max-w-sm w-full rounded-2xl shadow-xl relative overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex justify-between items-start mb-4">
-          <div className="bg-primary text-white p-2">
-            <Award className="w-6 h-6" />
+          <div className="p-2.5 bg-orange-50 text-primary rounded-xl">
+            <Award className="w-5 h-5 animate-pulse" />
           </div>
-          <button onClick={onClose} className="p-1 hover:bg-gray-100 border-2 border-accent">
-            <X className="w-6 h-6" />
+          <button onClick={onClose} className="p-2 hover:bg-orange-50 rounded-xl transition-all border border-orange-50">
+            <X className="w-5 h-5 text-slate-500 hover:text-black" />
           </button>
         </div>
 
-        <h3 className="text-3xl font-black uppercase italic leading-none mb-2">{item.name}</h3>
-        <div className="bg-accent text-white px-3 py-1 inline-block text-[10px] font-black uppercase tracking-widest mb-4">
-          {item.category === 'Principais' ? 'Acompanhamentos do Prato' : 'Benefícios à Saúde'}
-        </div>
+        <h3 className="text-xl font-display font-black text-slate-800 leading-snug mb-1">{item.name}</h3>
+        <span className="text-[10px] bg-orange-100/60 text-primary px-2.5 py-1 rounded-md font-display font-bold uppercase tracking-wider">
+          {item.category === 'Principais' ? 'Ingredientes & Destaque' : 'Atributos & Saúde'}
+        </span>
 
-        <div className="Nordeste-divider my-4" />
-
-        <p className="text-gray-800 font-medium leading-relaxed italic border-l-4 border-primary pl-4 py-2">
+        <p className="text-slate-650 font-medium text-xs leading-relaxed italic border-l-4 border-primary pl-4 py-1.5 mt-5 bg-orange-50/20 rounded-r-lg">
           {item.category === 'Principais' ? item.benefits : `"${item.benefits}"`}
         </p>
 
         <button 
           onClick={onClose}
-          className="btn-accent w-full mt-6 py-3 font-black"
+          className="w-full mt-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-display font-bold text-xs uppercase shadow-md transition-all active:scale-[0.98]"
         >
-          {item.category === 'Principais' ? 'QUE DELÍCIA!' : 'MAIS SAÚDE, POR FAVOR!'}
+          {item.category === 'Principais' ? 'Adoro!' : 'Muito Bom!'}
         </button>
       </motion.div>
     </motion.div>
